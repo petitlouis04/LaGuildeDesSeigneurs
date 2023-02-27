@@ -41,7 +41,7 @@ class CaracterRepository extends ServiceEntityRepository
 
     function test():array{
         return $this->createQueryBuilder("name")
-        ->andWhere("name = 'Louis'")
+        ->where("name = 'Louis'")
         ->getQuery()
         ->getResult();
     }

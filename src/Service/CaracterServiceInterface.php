@@ -1,7 +1,10 @@
-//src/Service/CaracterServiceInterface.php
+<?php
+
 namespace App\Service;
+
+
 interface CaracterServiceInterface
 {
-
+   
     public function create();
 }

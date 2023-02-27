@@ -6,39 +6,38 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Caracter;
-use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\CaracterRepository;
 use App\Service\CaracterServiceInterface;
+
 
 class CaracterController extends AbstractController
 {
 
+    public CaracterServiceInterface $caracter;
     public function __construct(
-                CaracterServiceInterface $caracterService
-                 
-            ) {
-
-            }
+        CaracterServiceInterface $caracter
+         
+    ) {
+        $this->caracter = $caracter;
+    }
 
     /**
-     * @Route("/caracter/display", name="app_caracter", methods={"GET","HEAD"})
+     * @Route("/caracter", name="app_caracter", methods={"GET","HEAD"})
      */
-    public function display(ManagerRegistry $doctrine): JsonResponse
+    public function display(): JsonResponse
     {
+
         $repository = $this->getDoctrine()->getRepository(Caracter::class);
         dd($repository->findAll());
-    
-        return new JsonResponse($character->toArray());
+        return $this->json();
     }
 
     /**
-     * @Route("/caracter/create", name="app_caracter", methods={"GET","HEAD"})
+     * @Route("/create", name="app_caracter_create", methods={"POST","HEAD"})
      */
-    public function create(ManagerRegistry $doctrine): JsonResponse
+    public function create(): JsonResponse
     {
-        // Reprendre les données de src/Entity/Character.php
-        $character = $this->caracterService->create();
-        return new JsonResponse($character->toArray(), JsonResponse::HTTP_CREATED);
+        $caracter = $this->caracter->create();
+        return new JsonResponse($caracter->toArray(), JsonResponse::HTTP_CREATED);
     }
-
 }
