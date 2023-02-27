@@ -45,6 +45,7 @@ class CaracterRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
     }
+
 //    /**
 //     * @return Caracter[] Returns an array of Caracter objects
 //     */

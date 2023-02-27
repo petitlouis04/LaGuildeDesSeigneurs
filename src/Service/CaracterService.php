@@ -5,16 +5,25 @@ use DateTime;
 use App\Entity\Caracter;
 use App\Service\CaracterServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\CaracterRepository;
 
 class CaracterService implements CaracterServiceInterface
 {
     public EntityManagerInterface $em;
-    
+    private CaracterRepository $caracterRepository;
+
     public function __construct(
-         EntityManagerInterface $em
+         EntityManagerInterface $em,
+         CaracterRepository $caracterRepository
             ) {
-                $this->em= $em;
+                $this->em= $em; 
+                $this->caracterRepository = $caracterRepository;
             }
+
+    /*public function findOneByIdentifier($identifier): Caracter
+    {
+        return $this->caracterRepository->findOneByIdentifier($identifier);
+    }*/        
 
     public function create(): Caracter
     {
@@ -27,6 +36,7 @@ class CaracterService implements CaracterServiceInterface
             ->setKnowledge('Sciences')
             ->setIntelligence(130)
             ->setLife(11)
+            ->setIdentifier(hash('sha1', uniqid()))
             ->setImage('/images/cartes/dames/anardil.jpg')
             ->setCreated(new \DateTime())
         ;

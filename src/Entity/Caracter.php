@@ -62,6 +62,11 @@ class Caracter
      */
     private $created;
 
+    /**
+     * @ORM\Column(type="string", length=40)
+     */
+    private $identifier;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -176,6 +181,18 @@ class Caracter
     public function setCreated(\DateTimeInterface $created): self
     {
         $this->created = $created;
+
+        return $this;
+    }
+
+    public function getIdentifier(): ?string
+    {
+        return $this->identifier;
+    }
+
+    public function setIdentifier(string $identifier): self
+    {
+        $this->identifier = $identifier;
 
         return $this;
     }

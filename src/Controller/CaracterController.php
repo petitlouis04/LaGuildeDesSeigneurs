@@ -8,28 +8,39 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Caracter;
 use App\Repository\CaracterRepository;
 use App\Service\CaracterServiceInterface;
+use App\Service\CaracterService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 
 class CaracterController extends AbstractController
 {
 
-    public CaracterServiceInterface $caracter;
+    public CaracterServiceInterface $caracterIntercace;
+    public CaracterService $caracterService;
+
     public function __construct(
-        CaracterServiceInterface $caracter
+        CaracterServiceInterface $caracterIntercace,
+        CaracterService $caracterService
          
     ) {
-        $this->caracter = $caracter;
+        $this->caracterIntercace = $caracterIntercace;
+        $this->caracterService = $caracterService;
     }
 
     /**
-     * @Route("/caracter", name="app_caracter", methods={"GET","HEAD"})
+     * 
+     * @Route("/caracter/{identifier}",
+     *  name="app_caracter_display",
+     * requirements={"identifier"="^([a-z0-9]{40})$"},
+     *  methods={"GET","HEAD"})
+     * @ParamConverter("caracter")
      */
-    public function display(): JsonResponse
+    public function display(Caracter $caracter): JsonResponse
     {
 
-        $repository = $this->getDoctrine()->getRepository(Caracter::class);
-        dd($repository->findAll());
-        return $this->json();
+        //$caracter = $this->caracterService->findOneByIdentifier($identifier);
+        //dd($caracter);
+        return new JsonResponse($caracter->toArray());
     }
 
     /**
@@ -37,7 +48,7 @@ class CaracterController extends AbstractController
      */
     public function create(): JsonResponse
     {
-        $caracter = $this->caracter->create();
+        $caracter = $this->caracterIntercace->create();
         return new JsonResponse($caracter->toArray(), JsonResponse::HTTP_CREATED);
     }
 }
