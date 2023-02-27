@@ -67,6 +67,11 @@ class Caracter
      */
     private $identifier;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $modified;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -193,6 +198,18 @@ class Caracter
     public function setIdentifier(string $identifier): self
     {
         $this->identifier = $identifier;
+
+        return $this;
+    }
+
+    public function getModified(): ?\DateTimeInterface
+    {
+        return $this->modified;
+    }
+
+    public function setModified(?\DateTimeInterface $modified): self
+    {
+        $this->modified = $modified;
 
         return $this;
     }
