@@ -51,4 +51,22 @@ class CaracterController extends AbstractController
         $caracter = $this->caracterIntercace->create();
         return new JsonResponse($caracter->toArray(), JsonResponse::HTTP_CREATED);
     }
+
+    /**
+     * @Route("/caracter/index", name="app_caracter_index", methods={"GET","HEAD"})
+     */
+    public function index(): JsonResponse
+    {
+        $this->denyAccessUnlessGranted('characterIndex', null);
+        $characters = $this->caracterService->findAll();
+        return new JsonResponse($characters);
+    }
+
+    /** 
+     * @Route("/caracter", name="app_character_redirect_index", methods={"GET","HEAD"})
+     */
+    public function redirectIndex()
+    {
+        return $this->redirectToRoute('app_caracter_index');
+    }
 }

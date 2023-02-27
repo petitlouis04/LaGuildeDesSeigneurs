@@ -23,7 +23,17 @@ class CaracterService implements CaracterServiceInterface
     /*public function findOneByIdentifier($identifier): Caracter
     {
         return $this->caracterRepository->findOneByIdentifier($identifier);
-    }*/        
+    }*/  
+
+    public function findAll(): array
+    {
+        $charactersFinal = array();
+        $characters = $this->caracterRepository->findAll();
+        foreach ($characters as $character) {
+            $charactersFinal[] = $character->toArray();
+        }
+        return $charactersFinal;
+    }
 
     public function create(): Caracter
     {

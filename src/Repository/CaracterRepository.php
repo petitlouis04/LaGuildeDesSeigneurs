@@ -39,12 +39,6 @@ class CaracterRepository extends ServiceEntityRepository
         }
     }
 
-    function test():array{
-        return $this->createQueryBuilder("name")
-        ->where("name = 'Louis'")
-        ->getQuery()
-        ->getResult();
-    }
 
 //    /**
 //     * @return Caracter[] Returns an array of Caracter objects

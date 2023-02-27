@@ -10,16 +10,19 @@ use App\Entity\Caracter;
 
 class CaracterVoter extends Voter
 {
+    public const CHARACTER_INDEX = 'characterIndex';
+    public const CHARACTER_CREATE = 'characterCreate';
     public const CHARACTER_DISPLAY = 'characterDisplay';
+
     private const ATTRIBUTES = array(
         self::CHARACTER_CREATE,
         self::CHARACTER_DISPLAY,
+        self::CHARACTER_INDEX,
     );
 
     # Checks if is allowed to display
     private function canDisplay($token, $subject)
     {
-        dd($subject);
         return true;
     }
 
@@ -39,7 +42,8 @@ class CaracterVoter extends Voter
                 break;
 
             case self::CHARACTER_DISPLAY:
-                return $this->canDisplay    ($token, $subject);
+            case self::CHARACTER_INDEX:
+                return $this->canDisplay($token, $subject);
                 break;
         }
 
