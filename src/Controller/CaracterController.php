@@ -38,8 +38,7 @@ class CaracterController extends AbstractController
     public function display(Caracter $caracter): JsonResponse
     {
 
-        //$caracter = $this->caracterService->findOneByIdentifier($identifier);
-        //dd($caracter);
+        $this->denyAccessUnlessGranted('characterDisplay', $caracter);
         return new JsonResponse($caracter->toArray());
     }
 
@@ -48,6 +47,7 @@ class CaracterController extends AbstractController
      */
     public function create(): JsonResponse
     {
+        $this->denyAccessUnlessGranted('characterCreate', null);
         $caracter = $this->caracterIntercace->create();
         return new JsonResponse($caracter->toArray(), JsonResponse::HTTP_CREATED);
     }
