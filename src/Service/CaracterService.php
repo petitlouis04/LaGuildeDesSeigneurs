@@ -54,4 +54,22 @@ class CaracterService implements CaracterServiceInterface
         $this->em->flush();
         return $character;
     }
+
+    public function modify(Caracter $character): Caracter
+    {
+        $character
+            ->setKind('Seigneur')
+            ->setName('Gorthol')
+            ->setSurname('Haume de terreur')
+            ->setCaste('Chevalier')
+            ->setKnowledge('Diplomatie')
+            ->setIntelligence(110)
+            ->setLife(13)
+            ->setImage('/images/cartes/seigneurs/gorthol.jpg')
+            //->setIdentifier(hash('sha1', uniqid())) -> supprimé pour ne pas le changer
+        ;
+        $this->em->persist($character);
+        $this->em->flush();
+        return $character;
+    }
 }

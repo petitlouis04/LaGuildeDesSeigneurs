@@ -13,11 +13,13 @@ class CaracterVoter extends Voter
     public const CHARACTER_INDEX = 'characterIndex';
     public const CHARACTER_CREATE = 'characterCreate';
     public const CHARACTER_DISPLAY = 'characterDisplay';
+    public const CHARACTER_MODIFY = 'characterModify';
 
     private const ATTRIBUTES = array(
         self::CHARACTER_CREATE,
         self::CHARACTER_DISPLAY,
         self::CHARACTER_INDEX,
+        self::CHARACTER_MODIFY,
     );
 
     # Checks if is allowed to display
@@ -45,6 +47,9 @@ class CaracterVoter extends Voter
             case self::CHARACTER_INDEX:
                 return $this->canDisplay($token, $subject);
                 break;
+            case self::CHARACTER_MODIFY:
+                return $this->canModify($token, $subject);
+                break;
         }
 
         throw new LogicException('Invalid attribute: ' . $attribute);
@@ -54,5 +59,11 @@ class CaracterVoter extends Voter
     private function canCreate($token, $subject)
     {
         return true;
+    }
+
+    # Checks if is allowed to modify
+    private function canModify($token, $subject)
+   {
+       return true;
     }
 }

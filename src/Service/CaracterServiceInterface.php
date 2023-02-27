@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Service;
-
+use App\Entity\Caracter;
 
 interface CaracterServiceInterface
 {
@@ -10,4 +10,6 @@ interface CaracterServiceInterface
 
     # Finds all the characters
     public function findAll();
+
+    public function modify(Caracter $character);
 }

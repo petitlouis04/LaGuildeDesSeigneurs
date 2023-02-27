@@ -52,11 +52,18 @@ class CaracterControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $this->assertEquals(404, $response->getStatusCode());
     }
-
+    /*
     public function testInexistingIdentifier()
     {
         $this->client->request('GET', '/caracter/470599538e39b61665ea758a9f591580bd22735c');
         $this->assertError404();
+    }
+
+    # Tests modify
+    public function testModify()
+    {
+        $this->client->request('PUT', '/caracter/modify/470599538e39b61665ea758a9f591580bd22735c');
+        $this->assertResponseCode204();
     }*/
 
 }

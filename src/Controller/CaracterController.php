@@ -27,8 +27,7 @@ class CaracterController extends AbstractController
         $this->caracterService = $caracterService;
     }
 
-    /**
-     * 
+    /** 
      * @Route("/caracter/{identifier}",
      *  name="app_caracter_display",
      * requirements={"identifier"="^([a-z0-9]{40})$"},
@@ -50,6 +49,19 @@ class CaracterController extends AbstractController
         $this->denyAccessUnlessGranted('characterCreate', null);
         $caracter = $this->caracterIntercace->create();
         return new JsonResponse($caracter->toArray(), JsonResponse::HTTP_CREATED);
+    }
+
+    /** 
+     * @Route("/caracter/modify/{identifier}",
+     *  name="app_character_modify",
+     * requirements={"identifier"="^([a-z0-9]{40})$"},
+     *  methods={"PUT","HEAD"})
+     */
+    public function modify(Caracter $character): JsonResponse
+    {
+        $this->denyAccessUnlessGranted('characterModify', $character);
+        $character = $this->caracterService->modify($character);
+        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
 
     /**
