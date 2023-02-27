@@ -72,4 +72,11 @@ class CaracterService implements CaracterServiceInterface
         $this->em->flush();
         return $character;
     }
+
+    public function delete(Caracter $caracter): bool
+    {
+        $this->em->remove($caracter);
+        $this->em->flush();
+        return true;
+    }
 }

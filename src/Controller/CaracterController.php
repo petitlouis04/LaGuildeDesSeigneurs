@@ -64,6 +64,19 @@ class CaracterController extends AbstractController
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
 
+    /** 
+     * @Route("/caracter/delete/{identifier}",
+     *  name="app_character_delete",
+     * requirements={"identifier"="^([a-z0-9]{40})$"},
+     *  methods={"DELETE","HEAD"})
+     */
+    public function delete(Caracter $character): JsonResponse
+    {
+        $this->denyAccessUnlessGranted('characterDelete', $character);
+        $character = $this->caracterService->delete($character);
+        return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+    }
+
     /**
      * @Route("/caracter/index", name="app_caracter_index", methods={"GET","HEAD"})
      */
