@@ -21,7 +21,25 @@ class CharacterControllerTest extends WebTestCase
     # Tests creates
     public function testCreate()
     {
-        $this->client->request('POST', '/create');
+        $this->client->request(
+                        'POST',
+                        '/create',
+                        array(),// Parameters
+                        array(),// Files
+                        array('CONTENT_TYPE' => 'application/json'),// Server
+                         <<<JSON
+                        {
+                            "kind":"Dame",
+                            "name":"Anardil",
+                            "surname":"Amie du Soleil",
+                            "caste":"Magicien",
+                            "knowledge":"Sciences",
+                            "intelligence":130,
+                            "life":11,
+                            "image":"/images/cartes/dames/anardil.jpg"
+                        }
+                        JSON
+                    );
         $this->assertResponseCode(201);
         $this->assertJsonResponse();
         $this->defineIdentifier();
@@ -48,7 +66,25 @@ class CharacterControllerTest extends WebTestCase
     # Tests modify
     public function testModify()
     {
-        $this->client->request('PUT', '/caracter/modify/' . self::$identifier);
+        $this->client->request(
+                        'PUT',
+                        '/caracter/modify/' . self::$identifier,
+                        array(),// Parameters
+                        array(),// Files
+                        array('CONTENT_TYPE' => 'application/json'),// Server
+                        <<<JSON
+                        {
+                            "kind":"Seigneur",
+                            "name":"Gorthol",
+                            "surname":"Heaume de terreur",
+                            "caste":"Diplomatie",
+                            "knowledge":"Sciences",
+                            "intelligence":110,
+                            "life":13,
+                            "image":"/images/cartes/seigneurs/gorthol.jpg"
+                        }
+                        JSON
+                    );
         $this->assertResponseCode(204);
     }
 

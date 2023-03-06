@@ -19,26 +19,39 @@ class Player
 
     /**
      * @ORM\Column(type="string", length=255)
+     * Assert\NotNull()
+     * Assert\NotBlank()
+     * Assert\Lenght(min:3,max:255)
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * Assert\NotNull()
+     * Assert\NotBlank()
+     * Assert\Lenght(min:3,max:255)
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * Assert\NotNull()
+     * Assert\NotBlank()
+     * Assert\Lenght(min:3,max:255)
      */
     private $email;
 
     /**
      * @ORM\Column(type="integer")
+     * Assert\PositiveOrZero 
      */
     private $mirian;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * Assert\NotNull()
+     * Assert\NotBlank()
+     * Assert\Lenght(min:40,max:40)
      */
     private $identifier;
 

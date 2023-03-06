@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CaracterRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CaracterRepository::class)
@@ -19,41 +20,55 @@ class Caracter
 
     /**
      * @ORM\Column(type="string", length=16)
+     * Assert\NotNull()
+     * Assert\NotBlank()
+     * Assert\Lenght(min:3,max:16)
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=16)
+     * Assert\NotNull()
+     * Assert\NotBlank()
+     * Assert\Lenght(min:3,max:64)
      */
     private $surname;
 
     /**
      * @ORM\Column(type="string", length=16, nullable=true)
+     * Assert\Lenght(min:3,max:16)
      */
     private $caste = null;
 
     /**
      * @ORM\Column(type="string", length=16, nullable=true)
+     * Assert\Lenght(min:3,max:16)
      */
     private $knowledge = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * Assert\PositiveOrZero  
      */
     private $intelligence = null; 
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * Assert\PositiveOrZero  
      */
     private $life = null;
 
     /**
      * @ORM\Column(type="string", length=128, nullable=true)
+     * Assert\Lenght(min:3,max:128)
      */
     private $image = null;
 
     /**
      * @ORM\Column(type="string", length=16)
+     * Assert\NotNull()
+     * Assert\NotBlank()
+     * Assert\Lenght(min:3,max:16)
      */
     private $kind;
 
@@ -64,6 +79,9 @@ class Caracter
 
     /**
      * @ORM\Column(type="string", length=40)
+     * Assert\NotNull()
+     * Assert\NotBlank()
+     * Assert\Lenght(min:40,max:40)
      */
     private $identifier;
 

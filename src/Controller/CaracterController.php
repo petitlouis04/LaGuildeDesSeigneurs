@@ -10,6 +10,7 @@ use App\Repository\CaracterRepository;
 use App\Service\CaracterServiceInterface;
 use App\Service\CaracterService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
 
 
 class CaracterController extends AbstractController
@@ -44,10 +45,10 @@ class CaracterController extends AbstractController
     /**
      * @Route("/create", name="app_caracter_create", methods={"POST","HEAD"})
      */
-    public function create(): JsonResponse
+    public function create(Request $request): JsonResponse
     {
         $this->denyAccessUnlessGranted('characterCreate', null);
-        $caracter = $this->caracterIntercace->create();
+        $caracter = $this->caracterIntercace->create($request->getContent());
         return new JsonResponse($caracter->toArray(), JsonResponse::HTTP_CREATED);
     }
 
@@ -57,10 +58,10 @@ class CaracterController extends AbstractController
      * requirements={"identifier"="^([a-z0-9]{40})$"},
      *  methods={"PUT","HEAD"})
      */
-    public function modify(Caracter $character): JsonResponse
+    public function modify(Request $request,Caracter $character): JsonResponse
     {
         $this->denyAccessUnlessGranted('characterModify', $character);
-        $character = $this->caracterService->modify($character);
+        $character = $this->caracterService->modify($character, $request->getContent());
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
 
