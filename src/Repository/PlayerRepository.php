@@ -39,6 +39,18 @@ class PlayerRepository extends ServiceEntityRepository
         }
     }
 
+    public function findOneByIdentifier(string $identifier): ?Player
+    {
+        return $this->createQueryBuilder('p')
+           ->select('p', 'c')
+           ->leftJoin('p.caracters', 'c')
+           ->where('p.identifier = :identifier')
+           ->setParameter('identifier', $identifier)
+           ->getQuery()
+           ->getOneOrNullResult()
+        ;
+    }
+
 //    /**
 //     * @return Player[] Returns an array of Player objects
 //     */

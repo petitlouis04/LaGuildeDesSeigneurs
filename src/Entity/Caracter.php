@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CaracterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -89,6 +91,11 @@ class Caracter
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $modified;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Player::class, inversedBy="caracters")
+     */
+    private $player;
 
     public function getId(): ?int
     {
@@ -179,11 +186,6 @@ class Caracter
         return $this;
     }
 
-    public function toArray()
-    {
-        return get_object_vars($this);
-    }
-
     public function getKind(): ?string
     {
         return $this->kind;
@@ -231,5 +233,18 @@ class Caracter
 
         return $this;
     }
+
+    public function getPlayer(): ?Player
+    {
+        return $this->player;
+    }
+
+    public function setPlayer(?Player $player): self
+    {
+        $this->player = $player;
+
+        return $this;
+    }
+
 
 }

@@ -9,6 +9,7 @@ use App\Entity\Player;
 use App\Service\PlayerService;
 use App\Service\PlayerServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 class PlayerController extends AbstractController
 {
@@ -23,7 +24,8 @@ class PlayerController extends AbstractController
      */
     public function displayPlayer(): JsonResponse
     {
-        return new JsonResponse($this->playerService->findAll());
+        $players = $this->playerService->findAll();
+        return JsonResponse::fromJsonString($this->playerService->serializeJson($players));
     }
 
     /** 
@@ -31,12 +33,13 @@ class PlayerController extends AbstractController
      *  name="app_player_display_one",
      * requirements={"identifier"="^([a-z0-9]{40})$"},
      *  methods={"GET","HEAD"})
+     * Entity={'player', expr: 'repository.findOneByIdentifier(identifier)'}
      */
     public function displayOnePlayer(Player $player): JsonResponse
     {
 
         //$this->denyAccessUnlessGranted('playerDisplay', $player);
-        return new JsonResponse($player->toArray());
+        return JsonResponse::fromJsonString($this->playerService->serializeJson($player));
     }
 
     /**
@@ -45,8 +48,8 @@ class PlayerController extends AbstractController
     public function create(Request $request): JsonResponse
     {
         //$this->denyAccessUnlessGranted('playerCreate', null);
-        $caracter = $this->playerServiceInterface->createPlayer($request->getContent());
-        return new JsonResponse($caracter->toArray(), JsonResponse::HTTP_CREATED);
+        $player = $this->playerServiceInterface->createPlayer($request->getContent());
+        return JsonResponse::fromJsonString($this->playerService->serializeJson($player), JsonResponse::HTTP_CREATED);
     }
 
     /** 

@@ -20,4 +20,9 @@ interface CaracterServiceInterface
     public function modify(Caracter $character,string $data);
 
     public function delete(Caracter $character);
+
+    # Serialize the object(s)
+    public function serializeJson($object);
+
+    
 }

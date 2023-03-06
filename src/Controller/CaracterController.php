@@ -11,6 +11,7 @@ use App\Service\CaracterServiceInterface;
 use App\Service\CaracterService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 
 class CaracterController extends AbstractController
@@ -33,13 +34,13 @@ class CaracterController extends AbstractController
      *  name="app_caracter_display",
      * requirements={"identifier"="^([a-z0-9]{40})$"},
      *  methods={"GET","HEAD"})
-     * @ParamConverter("caracter")
+     * Entity={'caracter', expr: 'repository.findOneByIdentifier(identifier)'}
      */
     public function display(Caracter $caracter): JsonResponse
     {
 
         $this->denyAccessUnlessGranted('characterDisplay', $caracter);
-        return new JsonResponse($caracter->toArray());
+        return JsonResponse::fromJsonString($this->caracterService->serializeJson($caracter));
     }
 
     /**
@@ -49,7 +50,7 @@ class CaracterController extends AbstractController
     {
         $this->denyAccessUnlessGranted('characterCreate', null);
         $caracter = $this->caracterIntercace->create($request->getContent());
-        return new JsonResponse($caracter->toArray(), JsonResponse::HTTP_CREATED);
+        return JsonResponse::fromJsonString($this->caracterService->serializeJson($player), JsonResponse::HTTP_CREATED);
     }
 
     /** 

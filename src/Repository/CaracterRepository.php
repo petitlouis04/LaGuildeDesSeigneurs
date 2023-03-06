@@ -39,6 +39,17 @@ class CaracterRepository extends ServiceEntityRepository
         }
     }
 
+    public function findOneByIdentifier(string $identifier): ?Player
+    {
+        return $this->createQueryBuilder('c')
+           ->select('c', 'p')
+           ->leftJoin('c.players', 'p')
+           ->where('c.identifier = :identifier')
+           ->setParameter('identifier', $identifier)
+           ->getQuery()
+           ->getOneOrNullResult()
+        ;
+    }
 
 //    /**
 //     * @return Caracter[] Returns an array of Caracter objects
