@@ -97,6 +97,9 @@ class Caracter
      */
     private $player;
 
+
+    private $links = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -242,6 +245,18 @@ class Caracter
     public function setPlayer(?Player $player): self
     {
         $this->player = $player;
+
+        return $this;
+    }
+
+    public function getLinks(): ?array
+    {
+        return $this->links;
+    }
+
+    public function setLinks(array $links): self
+    {
+        $this->links = $links;
 
         return $this;
     }

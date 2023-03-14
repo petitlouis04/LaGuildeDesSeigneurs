@@ -21,6 +21,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use App\Event\PlayerEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 
 class PlayerService implements PlayerServiceInterface
 {
@@ -58,6 +59,7 @@ class PlayerService implements PlayerServiceInterface
                     ];
         $normalizers = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
         $serializer = new Serializer([new DateTimeNormalizer(), $normalizers], [$encoders]);
+        $this->setLinks($object);
         return $serializer->serialize($object, 'json');
     }
 
@@ -133,5 +135,26 @@ class PlayerService implements PlayerServiceInterface
             $errorMsg .= json_encode($this->serializeJson($player));
             throw new UnprocessableEntityHttpException($errorMsg);
         }
+    }
+
+    public function setLinks($object)
+    {
+        $links =[[
+            'rel' => 'self',
+            'uri' => '/player/display/' . $object->getIdentifier()
+        ],[
+            'rel' => 'modify',
+            'uri' => '/player/modify/' . $object->getIdentifier()
+        ],[
+            'rel' => 'delete',
+            'uri' => '/player/delete/' . $object->getIdentifier()
+        ]];
+        $object->setLinks($links);
+        if($object instanceof SlidingPagination) {
+                        foreach ($object->getItems() as $item) {
+                            $this->setLinks($item);
+                        }
+                        return;
+                    }
     }
 }

@@ -144,6 +144,29 @@ class CaracterService implements CaracterServiceInterface
                     ];
         $normalizers = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
         $serializer = new Serializer([new DateTimeNormalizer(), $normalizers], [$encoders]);
+        $this->setLinks($object);
         return $serializer->serialize($object, 'json');
+    }
+
+    public function setLinks($object)
+    {
+        $links =[[
+            'rel' => 'self',
+            'uri' => '/caracter/' . $object->getIdentifier()
+        ],[
+            'rel' => 'modify',
+            'uri' => '/caracter/modify/' . $object->getIdentifier()
+        ],[
+            'rel' => 'delete',
+            'uri' => '/caracter/delete/' . $object->getIdentifier()
+        ]];
+        $object->setLinks($links);
+        if($object instanceof SlidingPagination) {
+                        // Si oui, on boucle sur les items
+                        foreach ($object->getItems() as $item) {
+                            $this->setLinks($item);
+                        }
+                       return;
+                    }
     }
 }

@@ -62,6 +62,11 @@ class Player
      */
     private $caracters;
 
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $links = [];
+
     public function __construct()
     {
         $this->caracters = new ArrayCollection();
@@ -158,6 +163,18 @@ class Player
                 $caracter->setPlayer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLinks(): ?array
+    {
+        return $this->links;
+    }
+
+    public function setLinks(array $links): self
+    {
+        $this->links = $links;
 
         return $this;
     }

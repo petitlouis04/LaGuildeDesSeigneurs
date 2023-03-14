@@ -23,4 +23,6 @@ interface PlayerServiceInterface
 
     # Serialize the object(s)
     public function serializeJson($object);
+
+    public function setLinks($object);
 }
