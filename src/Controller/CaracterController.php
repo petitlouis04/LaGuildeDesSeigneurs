@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Attributes as OA;
+use Knp\Component\Pager\PaginatorInterface;
 
 class CaracterController extends AbstractController
 {
@@ -84,11 +85,15 @@ class CaracterController extends AbstractController
     /**
      * @Route("/caracter/index", name="app_caracter_index", methods={"GET","HEAD"})
      */
-    public function index(): JsonResponse
+    public function index(Request $request, PaginatorInterface $paginator): JsonResponse
     {
         $this->denyAccessUnlessGranted('characterIndex', null);
-        $characters = $this->caracterService->findAll();
-        return new JsonResponse($characters);
+        $characters = $paginator->paginate(
+                        $this->caracterService->findAll(), // On appelle la même requête
+                        $request->query->getInt('page', 1), // 1 par défaut
+                        min(100, $request->query->getInt('size', 10)) // 10 par défaut et 100 maximum
+                    );
+                    return JsonResponse::fromJsonString($this->caracterService->serializeJson($characters));
     }
 
     /**

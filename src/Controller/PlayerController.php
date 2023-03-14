@@ -10,6 +10,7 @@ use App\Service\PlayerService;
 use App\Service\PlayerServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Knp\Component\Pager\PaginatorInterface;
 
 class PlayerController extends AbstractController
 {
@@ -23,9 +24,13 @@ class PlayerController extends AbstractController
     /**
      * @Route("/player/display", name="app_player_display",methods={"GET","HEAD"})
      */
-    public function displayPlayer(): JsonResponse
+    public function displayPlayer(Request $request, PaginatorInterface $paginator): JsonResponse
     {
-        $players = $this->playerService->findAll();
+        $players = $paginator->paginate(
+                        $this->playerService->findAll(),
+                        $request->query->getInt('page', 1),
+                        min(100, $request->query->getInt('size', 10))
+                    );
         return JsonResponse::fromJsonString($this->playerService->serializeJson($players));
     }
 

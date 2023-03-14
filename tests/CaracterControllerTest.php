@@ -52,6 +52,18 @@ class CharacterControllerTest extends WebTestCase
         $this->client->request('GET', '/caracter/index');
         $this->assertResponseCode(200);
         $this->assertJsonResponse();
+        // Tests with page
+        $this->client->request('GET', '/caracter/index?page=1');
+        $this->assertResponseCode(200);
+        $this->assertJsonResponse();
+        // Tests with page and size
+        $this->client->request('GET', '/caracter/index?page=1&size=1');
+        $this->assertResponseCode(200);
+        $this->assertJsonResponse();
+        // Tests with size
+        $this->client->request('GET', '/caracter/index?size=1');
+        $this->assertResponseCode(200);
+        $this->assertJsonResponse();
     }
 
     # Tests display
