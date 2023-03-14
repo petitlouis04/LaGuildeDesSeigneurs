@@ -25,9 +25,9 @@ class PlayerVoter extends Voter
     protected function supports(string $attribute, $subject): bool
     {
         if (null !== $subject) {
-                        return $subject instanceof Player && in_array($attribute, self::ATTRIBUTES);
-                    }
-                    return in_array($attribute, self::ATTRIBUTES);
+            return $subject instanceof Player && in_array($attribute, self::ATTRIBUTES);
+        }
+        return in_array($attribute, self::ATTRIBUTES);
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -41,17 +41,14 @@ class PlayerVoter extends Voter
         switch ($attribute) {
             case self::PLAYER_CREATE:
                 return $this->canCreate($token, $subject);
-                break;
 
             case self::PLAYER_DISPLAY:
 
             case self::PLAYER_MODIFY:
                 return $this->canModify($token, $subject);
-                break;
 
             case self::PLAYER_DELETE:
                 return $this->canDelete($token, $subject);
-                break;
         }
 
         throw new LogicException('Invalid attribute: ' . $attribute);
@@ -65,13 +62,13 @@ class PlayerVoter extends Voter
 
     # Checks if is allowed to modify
     private function canModify($token, $subject)
-   {
-       return true;
+    {
+        return true;
     }
 
     # Checks if is allowed to delete
     private function canDelete($token, $subject)
-   {
-       return true;
+    {
+        return true;
     }
 }

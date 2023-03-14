@@ -1,7 +1,10 @@
 <?php
+
 namespace App\Listener;
+
 use App\Event\CaracterEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 class CharacterListener implements EventSubscriberInterface
 {
     public static function getSubscribedEvents(): array
@@ -19,16 +22,17 @@ class CharacterListener implements EventSubscriberInterface
         // Réception de l'objet Character avec le getter
         $character = $event->getCharacter();
         // Modification de l'objet
-        if("Dame" === $character->getKind()) {
-                        $character->setLife($character->getLife() + 2);
-                    } elseif ("Ennemi" === $character->getKind()) {
-                        $character->setLife($character->getLife() - 2);
-                               }
+        if ("Dame" === $character->getKind()) {
+            $character->setLife($character->getLife() + 2);
+        } elseif ("Ennemi" === $character->getKind()) {
+            $character->setLife($character->getLife() - 2);
+        }
 
         $character->setIntelligence(250);
     }
 
-    public function characterModified($event){
+    public function characterModified($event)
+    {
         $character = $event->getCharacter();
 
         $character->setMirian($character->getMarian() -10);

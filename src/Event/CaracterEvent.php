@@ -1,7 +1,10 @@
 <?php
+
 namespace App\Event;
+
 use App\Entity\Caracter;
 use Symfony\Contracts\EventDispatcher\Event;
+
 class CaracterEvent extends Event
 {
     // Constante pour le nom de l'event, nommage par convention
@@ -12,7 +15,7 @@ class CaracterEvent extends Event
 
     private Caracter $character;
     public function __construct(
-         Caracter $character
+        Caracter $character
     ) {
         $this->character = $character;
     }

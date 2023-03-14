@@ -15,7 +15,8 @@ class PlayerController extends AbstractController
 {
     public PlayerService $playerService;
     public PlayerServiceInterface $playerServiceInterface;
-    public function __construct(PlayerService $playerService,PlayerServiceInterface $playerServiceInterface){
+    public function __construct(PlayerService $playerService, PlayerServiceInterface $playerServiceInterface)
+    {
         $this->playerService = $playerService;
         $this->playerServiceInterface = $playerServiceInterface;
     }
@@ -28,7 +29,7 @@ class PlayerController extends AbstractController
         return JsonResponse::fromJsonString($this->playerService->serializeJson($players));
     }
 
-    /** 
+    /**
      * @Route("/player/display/{identifier}",
      *  name="app_player_display_one",
      * requirements={"identifier"="^([a-z0-9]{40})$"},
@@ -37,7 +38,6 @@ class PlayerController extends AbstractController
      */
     public function displayOnePlayer(Player $player): JsonResponse
     {
-
         //$this->denyAccessUnlessGranted('playerDisplay', $player);
         return JsonResponse::fromJsonString($this->playerService->serializeJson($player));
     }
@@ -52,7 +52,7 @@ class PlayerController extends AbstractController
         return JsonResponse::fromJsonString($this->playerService->serializeJson($player), JsonResponse::HTTP_CREATED);
     }
 
-    /** 
+    /**
      * @Route("/player/delete/{identifier}",
      *  name="app_player_delete",
      * requirements={"identifier"="^([a-z0-9]{40})$"},
@@ -65,13 +65,13 @@ class PlayerController extends AbstractController
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }
 
-    /** 
+    /**
      * @Route("/player/modify/{identifier}",
      *  name="app_player_modify",
      * requirements={"identifier"="^([a-z0-9]{40})$"},
      *  methods={"PUT","HEAD"})
      */
-    public function modify(Request $request,Player $player): JsonResponse
+    public function modify(Request $request, Player $player): JsonResponse
     {
         //$this->denyAccessUnlessGranted('playerModify', $player);
         $player = $this->playerService->modify($player, $request->getContent());

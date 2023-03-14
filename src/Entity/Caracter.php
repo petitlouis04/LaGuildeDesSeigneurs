@@ -50,13 +50,13 @@ class Caracter
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * Assert\PositiveOrZero  
+     * Assert\PositiveOrZero
      */
-    private $intelligence = null; 
+    private $intelligence = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * Assert\PositiveOrZero  
+     * Assert\PositiveOrZero
      */
     private $life = null;
 
@@ -245,6 +245,4 @@ class Caracter
 
         return $this;
     }
-
-
 }

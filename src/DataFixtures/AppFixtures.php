@@ -40,40 +40,39 @@ class AppFixtures extends Fixture
         }
 
         $totalCharacters = 20;
-                # Creates random Characters
-                for ($i = 0; $i < $totalCharacters; $i++) {
-                    $character = new Caracter();
-                    $character
-                        ->setKind(rand(0, 1) ? 'Dame' : 'Seigneur')
-                        ->setName('Anardil' . $i)
-                        ->setSurname('Amie du Soleil')
-                        ->setCaste('Magicien')
-                        ->setKnowledge('Sciences')
-                        ->setIntelligence(mt_rand(100, 200))
-                        ->setLife(mt_rand(10, 20))
-                        ->setIdentifier(hash('sha1', uniqid()))
-                        ->setImage('/images/cartes/dames/anardil.jpg')
-                        ->setCreated(new \DateTime())
-                    ;
-                    $manager->persist($character);
-                }
-                # Creates random Players
+        # Creates random Characters
+        for ($i = 0; $i < $totalCharacters; $i++) {
+            $character = new Caracter();
+            $character
+                ->setKind(rand(0, 1) ? 'Dame' : 'Seigneur')
+                ->setName('Anardil' . $i)
+                ->setSurname('Amie du Soleil')
+                ->setCaste('Magicien')
+                ->setKnowledge('Sciences')
+                ->setIntelligence(mt_rand(100, 200))
+                ->setLife(mt_rand(10, 20))
+                ->setIdentifier(hash('sha1', uniqid()))
+                ->setImage('/images/cartes/dames/anardil.jpg')
+                ->setCreated(new \DateTime())
+            ;
+            $manager->persist($character);
+        }
+        # Creates random Players
         $players = [];
         for ($i = 0; $i < $totalPlayers; $i++) {
-             $player = new Player();
-             $player
-             ->setFirstname('Laurent' . $i)
-             ->setLastname('Marquet' . $i)
-             ->setEmail('email' . $i . 'example.com')
-             ->setMirian(rand(0, 100000))
-             ->setIdentifier(hash('sha1', uniqid()))
+            $player = new Player();
+            $player
+            ->setFirstname('Laurent' . $i)
+            ->setLastname('Marquet' . $i)
+            ->setEmail('email' . $i . 'example.com')
+            ->setMirian(rand(0, 100000))
+            ->setIdentifier(hash('sha1', uniqid()))
             ;
             $manager->persist($player);
             // Used to link to Characters
             $players[] = $player;
 
-        $manager->flush();
+            $manager->flush();
+        }
     }
-
-}
 }

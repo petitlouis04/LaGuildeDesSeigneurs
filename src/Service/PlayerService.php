@@ -1,6 +1,9 @@
 <?php
+
 //src/Service/CharacterService.php
+
 namespace App\Service;
+
 use DateTime;
 use App\Entity\Player;
 use App\Service\PlayerServiceInterface;
@@ -22,29 +25,29 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class PlayerService implements PlayerServiceInterface
 {
     public EntityManagerInterface $em;
-    private CaracterRepository $caracterRepository;
     private FormFactoryInterface $formFactory;
     private ValidatorInterface $validator;
     private EventDispatcherInterface $dispatcher;
+    private PlayerRepository $playerRepository;
 
     public function __construct(
-         EntityManagerInterface $em,
-         FormFactoryInterface $formFactory,
-         ValidatorInterface $validator,
-         PlayerRepository $playerRepository,
-         EventDispatcherInterface $dispatcher
-            ) {
-                $this->em= $em; 
-                $this->playerRepository = $playerRepository;
-                $this->formFactory = $formFactory;
-                $this->validator = $validator;
-                $this->dispatcher= $dispatcher;
-            }
+        EntityManagerInterface $em,
+        FormFactoryInterface $formFactory,
+        ValidatorInterface $validator,
+        PlayerRepository $playerRepository,
+        EventDispatcherInterface $dispatcher
+    ) {
+        $this->em= $em;
+        $this->playerRepository = $playerRepository;
+        $this->formFactory = $formFactory;
+        $this->validator = $validator;
+        $this->dispatcher= $dispatcher;
+    }
 
     /*public function findOneByIdentifier($identifier): Caracter
     {
         return $this->caracterRepository->findOneByIdentifier($identifier);
-    }*/  
+    }*/
     public function serializeJson($object)
     {
         $encoders = new JsonEncoder();
@@ -63,12 +66,13 @@ class PlayerService implements PlayerServiceInterface
         return $this->playerRepository->findAll();
     }
 
-    public function createPlayer(string $data):Player{
-       $player = new Player();
-       $player
-              ->setIdentifier(hash('sha1', uniqid()))
-              ;
-        
+    public function createPlayer(string $data): Player
+    {
+        $player = new Player();
+        $player
+               ->setIdentifier(hash('sha1', uniqid()))
+        ;
+
         $this->submit($player, PlayerType::class, $data);
 
         $event = new PlayerEvent($player);
@@ -82,7 +86,7 @@ class PlayerService implements PlayerServiceInterface
         return $player;
     }
 
-    public function modify(Player $player,string $data): Player
+    public function modify(Player $player, string $data): Player
     {
         $this->submit($player, PlayerType::class, $data);
         $event = new PlayerEvent($player);
@@ -107,7 +111,7 @@ class PlayerService implements PlayerServiceInterface
         // Bad array
         if (null !== $data && !is_array($dataArray)) {
             throw new UnprocessableEntityHttpException('Submitted data is not an array -> ' . $data);
-        }   
+        }
         // Submits form
         $form = $this->formFactory->create($formName, $player, ['csrf_protection' => false]);
         $form->submit($dataArray, false);// With false, only submitted fields are validated
@@ -130,5 +134,4 @@ class PlayerService implements PlayerServiceInterface
             throw new UnprocessableEntityHttpException($errorMsg);
         }
     }
-
 }

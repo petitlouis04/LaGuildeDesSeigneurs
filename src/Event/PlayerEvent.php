@@ -1,7 +1,10 @@
 <?php
+
 namespace App\Event;
+
 use App\Entity\Player;
 use Symfony\Contracts\EventDispatcher\Event;
+
 class PlayerEvent extends Event
 {
     public const PLAYER_MODIFIED = 'app.player.modified';
@@ -10,7 +13,7 @@ class PlayerEvent extends Event
 
     protected Player $player;
     public function __construct(
-     Player $player
+        Player $player
     ) {
         $this->player = $player;
     }
@@ -18,4 +21,4 @@ class PlayerEvent extends Event
     {
         return $this->player;
     }
-} 
+}

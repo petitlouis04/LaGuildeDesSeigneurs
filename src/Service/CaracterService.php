@@ -1,6 +1,9 @@
 <?php
+
 //src/Service/CharacterService.php
+
 namespace App\Service;
+
 use DateTime;
 use App\Entity\Caracter;
 use App\Service\CaracterServiceInterface;
@@ -28,23 +31,23 @@ class CaracterService implements CaracterServiceInterface
     private EventDispatcherInterface $dispatcher;
 
     public function __construct(
-         EntityManagerInterface $em,
-         FormFactoryInterface $formFactory,
-         ValidatorInterface $validator,
-         CaracterRepository $caracterRepository,
-         EventDispatcherInterface $dispatcher
-            ) {
-                $this->em= $em; 
-                $this->caracterRepository = $caracterRepository;
-                $this->formFactory = $formFactory;
-                $this->validator = $validator;
-                $this->dispatcher= $dispatcher;
-            }
+        EntityManagerInterface $em,
+        FormFactoryInterface $formFactory,
+        ValidatorInterface $validator,
+        CaracterRepository $caracterRepository,
+        EventDispatcherInterface $dispatcher
+    ) {
+        $this->em= $em;
+        $this->caracterRepository = $caracterRepository;
+        $this->formFactory = $formFactory;
+        $this->validator = $validator;
+        $this->dispatcher= $dispatcher;
+    }
 
     /*public function findOneByIdentifier($identifier): Caracter
     {
         return $this->caracterRepository->findOneByIdentifier($identifier);
-    }*/  
+    }*/
 
     public function findAll(): array
     {
@@ -63,7 +66,7 @@ class CaracterService implements CaracterServiceInterface
         $event = new CaracterEvent($character);
         // Utilisation de la constante définie dans l'Event
         $this->dispatcher->dispatch($event, CaracterEvent::CHARACTER_CREATED);
-   
+
         $this->isEntityFilled($character);
 
         $this->em->persist($character);
@@ -73,7 +76,7 @@ class CaracterService implements CaracterServiceInterface
         return $character;
     }
 
-    public function modify(Caracter $character,string $data): Caracter
+    public function modify(Caracter $character, string $data): Caracter
     {
         $this->submit($character, CaracterType::class, $data);
         $event = new CaracterEvent($character);
@@ -85,7 +88,7 @@ class CaracterService implements CaracterServiceInterface
         $character
             ->setModified(new \DateTime())
         ;
-        
+
 
         $this->em->persist($character);
         $this->em->flush();
@@ -105,7 +108,7 @@ class CaracterService implements CaracterServiceInterface
         // Bad array
         if (null !== $data && !is_array($dataArray)) {
             throw new UnprocessableEntityHttpException('Submitted data is not an array -> ' . $data);
-        }   
+        }
         // Submits form
         $form = $this->formFactory->create($formName, $character, ['csrf_protection' => false]);
         $form->submit($dataArray, false);// With false, only submitted fields are validated
@@ -125,7 +128,7 @@ class CaracterService implements CaracterServiceInterface
         $errors = $this->validator->validate($character);
 
         if (count($errors) > 0) {
-            $errorMsg  = (string) $errors . 'Wrong data for Entity -> ';
+            $errorMsg  = $errors . 'Wrong data for Entity -> ';
             $errorMsg .= json_encode($this->serializeJson($character));
             throw new UnprocessableEntityHttpException($errorMsg);
         }

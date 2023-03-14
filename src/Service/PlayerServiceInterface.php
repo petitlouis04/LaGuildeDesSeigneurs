@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Service;
+
 use App\Entity\Player;
 
 interface PlayerServiceInterface
@@ -16,7 +17,7 @@ interface PlayerServiceInterface
     # Finds all the characters
     public function findAll();
 
-    public function modify(Player $player,string $data);
+    public function modify(Player $player, string $data);
 
     //public function delete(Player $player);
 

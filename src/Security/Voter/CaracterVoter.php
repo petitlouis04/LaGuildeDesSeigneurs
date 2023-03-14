@@ -33,9 +33,9 @@ class CaracterVoter extends Voter
     protected function supports(string $attribute, $subject): bool
     {
         if (null !== $subject) {
-                        return $subject instanceof Caracter && in_array($attribute, self::ATTRIBUTES);
-                    }
-                    return in_array($attribute, self::ATTRIBUTES);
+            return $subject instanceof Caracter && in_array($attribute, self::ATTRIBUTES);
+        }
+        return in_array($attribute, self::ATTRIBUTES);
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -43,20 +43,16 @@ class CaracterVoter extends Voter
         switch ($attribute) {
             case self::CHARACTER_CREATE:
                 return $this->canCreate($token, $subject);
-                break;
 
             case self::CHARACTER_DISPLAY:
             case self::CHARACTER_INDEX:
                 return $this->canDisplay($token, $subject);
-                break;
 
             case self::CHARACTER_MODIFY:
                 return $this->canModify($token, $subject);
-                break;
 
             case self::CHARACTER_DELETE:
                 return $this->canDelete($token, $subject);
-                break;
         }
 
         throw new LogicException('Invalid attribute: ' . $attribute);
@@ -70,13 +66,13 @@ class CaracterVoter extends Voter
 
     # Checks if is allowed to modify
     private function canModify($token, $subject)
-   {
-       return true;
+    {
+        return true;
     }
 
     # Checks if is allowed to delete
     private function canDelete($token, $subject)
-   {
-       return true;
+    {
+        return true;
     }
 }

@@ -45,7 +45,7 @@ class Player
 
     /**
      * @ORM\Column(type="integer")
-     * Assert\PositiveOrZero 
+     * Assert\PositiveOrZero
      */
     private $mirian;
 
@@ -161,6 +161,4 @@ class Player
 
         return $this;
     }
-
-
 }
