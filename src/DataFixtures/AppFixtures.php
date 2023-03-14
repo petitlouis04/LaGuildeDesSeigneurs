@@ -57,9 +57,23 @@ class AppFixtures extends Fixture
                     ;
                     $manager->persist($character);
                 }
+                # Creates random Players
+        $players = [];
+        for ($i = 0; $i < $totalPlayers; $i++) {
+             $player = new Player();
+             $player
+             ->setFirstname('Laurent' . $i)
+             ->setLastname('Marquet' . $i)
+             ->setEmail('email' . $i . 'example.com')
+             ->setMirian(rand(0, 100000))
+             ->setIdentifier(hash('sha1', uniqid()))
+            ;
+            $manager->persist($player);
+            // Used to link to Characters
+            $players[] = $player;
 
         $manager->flush();
     }
 
-   
+}
 }

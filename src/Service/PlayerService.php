@@ -16,6 +16,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use App\Event\PlayerEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class PlayerService implements PlayerServiceInterface
 {
@@ -23,17 +25,20 @@ class PlayerService implements PlayerServiceInterface
     private CaracterRepository $caracterRepository;
     private FormFactoryInterface $formFactory;
     private ValidatorInterface $validator;
+    private EventDispatcherInterface $dispatcher;
 
     public function __construct(
          EntityManagerInterface $em,
          FormFactoryInterface $formFactory,
          ValidatorInterface $validator,
-         PlayerRepository $playerRepository
+         PlayerRepository $playerRepository,
+         EventDispatcherInterface $dispatcher
             ) {
                 $this->em= $em; 
                 $this->playerRepository = $playerRepository;
                 $this->formFactory = $formFactory;
                 $this->validator = $validator;
+                $this->dispatcher= $dispatcher;
             }
 
     /*public function findOneByIdentifier($identifier): Caracter
@@ -45,7 +50,7 @@ class PlayerService implements PlayerServiceInterface
         $encoders = new JsonEncoder();
         $defaultContext = [
                         AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object) {
-                            return $object->getIdentifier(); // Ce qu'il doit retourner
+                            return $object->getId(); // Ce qu'il doit retourner
                         },
                     ];
         $normalizers = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
@@ -65,16 +70,23 @@ class PlayerService implements PlayerServiceInterface
               ;
         
         $this->submit($player, PlayerType::class, $data);
+
+        $event = new PlayerEvent($player);
+        $this->dispatcher->dispatch($event, PlayerEvent::PLAYER_CREATED);
+
         $this->isEntityFilled($player);
 
         $this->em->persist($player);
         $this->em->flush();
+        $this->dispatcher->dispatch($event, CaracterEvent::CHARACTER_CREATED_POST_DATABASE);
         return $player;
     }
 
     public function modify(Player $player,string $data): Player
     {
         $this->submit($player, PlayerType::class, $data);
+        $event = new PlayerEvent($player);
+        $this->dispatcher->dispatch($event, PlayerEvent::PLAYER_MODIFIED);
         $this->isEntityFilled($player);
 
         $this->em->persist($player);
@@ -118,4 +130,5 @@ class PlayerService implements PlayerServiceInterface
             throw new UnprocessableEntityHttpException($errorMsg);
         }
     }
+
 }

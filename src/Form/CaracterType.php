@@ -26,6 +26,7 @@ class CaracterType extends AbstractType
             ->add('created', DateTimeType::class)
             ->add('identifier', TextType::class)
             ->add('modified', DateTimeType::class)
+            ->add('player')
         ;
     }
 

@@ -16,6 +16,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use App\Event\CaracterEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CaracterService implements CaracterServiceInterface
 {
@@ -23,17 +25,20 @@ class CaracterService implements CaracterServiceInterface
     private CaracterRepository $caracterRepository;
     private FormFactoryInterface $formFactory;
     private ValidatorInterface $validator;
+    private EventDispatcherInterface $dispatcher;
 
     public function __construct(
          EntityManagerInterface $em,
          FormFactoryInterface $formFactory,
          ValidatorInterface $validator,
-         CaracterRepository $caracterRepository
+         CaracterRepository $caracterRepository,
+         EventDispatcherInterface $dispatcher
             ) {
                 $this->em= $em; 
                 $this->caracterRepository = $caracterRepository;
                 $this->formFactory = $formFactory;
                 $this->validator = $validator;
+                $this->dispatcher= $dispatcher;
             }
 
     /*public function findOneByIdentifier($identifier): Caracter
@@ -54,21 +59,34 @@ class CaracterService implements CaracterServiceInterface
             ->setCreated(new \DateTime())
         ;
         $this->submit($character, CaracterType::class, $data);
+        // Dispatch created event
+        $event = new CaracterEvent($character);
+        // Utilisation de la constante définie dans l'Event
+        $this->dispatcher->dispatch($event, CaracterEvent::CHARACTER_CREATED);
+   
         $this->isEntityFilled($character);
 
         $this->em->persist($character);
         $this->em->flush();
+        $this->dispatcher->dispatch($event, CaracterEvent::CHARACTER_CREATED_POST_DATABASE);
+
         return $character;
     }
 
     public function modify(Caracter $character,string $data): Caracter
     {
         $this->submit($character, CaracterType::class, $data);
+        $event = new CaracterEvent($character);
+        // Utilisation de la constante définie dans l'Event
+        $this->dispatcher->dispatch($event, CaracterEvent::CHARACTER_MODIFIED);
+
         $this->isEntityFilled($character);
 
         $character
             ->setModified(new \DateTime())
         ;
+        
+
         $this->em->persist($character);
         $this->em->flush();
         return $character;
@@ -118,7 +136,7 @@ class CaracterService implements CaracterServiceInterface
         $encoders = new JsonEncoder();
         $defaultContext = [
                         AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object) {
-                            return $object->getIdentifier(); // Ce qu'il doit retourner
+                            return $object->getId(); // Ce qu'il doit retourner
                         },
                     ];
         $normalizers = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
