@@ -76,7 +76,7 @@ class CharacterControllerTest extends WebTestCase
                         {
                             "kind":"Seigneur",
                             "name":"Gorthol",
-                            "surname":"Heaume de terreur",
+                            "surname":"Heaume",
                             "caste":"Diplomatie",
                             "knowledge":"Sciences",
                             "intelligence":110,

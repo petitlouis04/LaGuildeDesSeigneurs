@@ -12,7 +12,8 @@ use App\Service\CaracterService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
-
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Attributes as OA;
 
 class CaracterController extends AbstractController
 {
@@ -35,6 +36,10 @@ class CaracterController extends AbstractController
      * requirements={"identifier"="^([a-z0-9]{40})$"},
      *  methods={"GET","HEAD"})
      * Entity={'caracter', expr: 'repository.findOneByIdentifier(identifier)'}
+     * Parametre={name: 'identifier',in: 'path',description: 'Identifier for the Character',schema: new OA\Schema(type: 'string'),required: true}
+     * Response={response:200,description:'Identifier for the caracter',content:new Model(type: Caracter::class)}
+     * Response={response:403,description:'Acces denied'}
+     * Response={response:404,description:'Not found'}
      */
     public function display(Caracter $caracter): JsonResponse
     {
@@ -50,7 +55,7 @@ class CaracterController extends AbstractController
     {
         $this->denyAccessUnlessGranted('characterCreate', null);
         $caracter = $this->caracterIntercace->create($request->getContent());
-        return JsonResponse::fromJsonString($this->caracterService->serializeJson($player), JsonResponse::HTTP_CREATED);
+        return JsonResponse::fromJsonString($this->caracterService->serializeJson($caracter), JsonResponse::HTTP_CREATED);
     }
 
     /** 

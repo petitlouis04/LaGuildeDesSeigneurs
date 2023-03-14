@@ -1,6 +1,16 @@
 {
+    "name": "eipt/la-guilde-des-seigneurs",
     "type": "project",
+    "description": "API La Guilde des Seigneurs",
     "license": "proprietary",
+    "authors": [
+                {
+                    "name": "Louis Ancel",
+                    "email": "louisfil04@yahoo.com",
+                    "homepage": "https://github.com/LaurentMarquet",
+                    "role": "Developer"
+                }
+            ],
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
@@ -11,21 +21,26 @@
         "doctrine/doctrine-bundle": "^2.8",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
+        "nelmio/api-doc-bundle": "^4.11",
         "sensio/framework-extra-bundle": "^6.2",
         "symfony/apache-pack": "^1.0",
+        "symfony/asset": "5.4.*",
         "symfony/console": "5.4.*",
         "symfony/dotenv": "5.4.*",
         "symfony/event-dispatcher": "5.4.*",
         "symfony/expression-language": "5.4.*",
         "symfony/flex": "^1.17|^2",
-        "symfony/form": "5.4.*",
+        "symfony/form": "5.*",
         "symfony/framework-bundle": "5.4.*",
         "symfony/monolog-bundle": "^3.8",
         "symfony/runtime": "5.4.*",
         "symfony/security-bundle": "5.4.*",
         "symfony/serializer": "5.4.*",
+        "symfony/twig-bundle": "5.4.*",
         "symfony/validator": "5.4.*",
-        "symfony/yaml": "5.4.*"
+        "symfony/yaml": "5.4.*",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",

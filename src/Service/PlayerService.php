@@ -78,7 +78,7 @@ class PlayerService implements PlayerServiceInterface
 
         $this->em->persist($player);
         $this->em->flush();
-        $this->dispatcher->dispatch($event, CaracterEvent::CHARACTER_CREATED_POST_DATABASE);
+        $this->dispatcher->dispatch($event, PlayerEvent::PLAYER_CREATED_POST_DATABASE);
         return $player;
     }
 
