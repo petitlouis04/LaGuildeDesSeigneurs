@@ -5,9 +5,19 @@ namespace App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Caracter;
+use App\Entity\User;
+use App\Entity\Player;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    private UserPasswordHasherInterface $hasher;   
+    public function __construct(
+                 UserPasswordHasherInterface $hasher
+            ) {
+                $this->hasher = $hasher;
+            }
+
     # Sets the Character with its data
     public function setCharacter($kind, $characterName, $characterData): Caracter
     {
@@ -39,6 +49,29 @@ class AppFixtures extends Fixture
             }
         }
 
+        # Creates Users
+        $emails = [
+            'contact@example.com',
+            'info@example.com',
+            'email@example.com',
+        ];
+        $users = [];
+        foreach ($emails as $email) {
+            $user = new User();
+            $user
+                ->setEmail($email)
+                ->setPassword($this->hasher->hashPassword($user, 'StrongPassword*'))
+                ->setCreated(new \DateTime())
+                ->setModified(new \DateTime())
+            ;
+            // On définit seulement cet utilisateur comme admin
+            if ('contact@example.com' === $email) {
+                $user->setRoles(['ROLE_ADMIN']);
+            }
+            $manager->persist($user);
+            $users[] = $user;
+        
+        }
         $totalCharacters = 20;
         # Creates random Characters
         for ($i = 0; $i < $totalCharacters; $i++) {
@@ -54,10 +87,12 @@ class AppFixtures extends Fixture
                 ->setIdentifier(hash('sha1', uniqid()))
                 ->setImage('/images/cartes/dames/anardil.jpg')
                 ->setCreated(new \DateTime())
+                ->setUser($users[array_rand($users)])
             ;
             $manager->persist($character);
         }
         # Creates random Players
+        $totalPlayers=20;
         $players = [];
         for ($i = 0; $i < $totalPlayers; $i++) {
             $player = new Player();

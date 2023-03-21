@@ -37,8 +37,8 @@ class Caracter
     private $surname;
 
     /**
-     * @ORM\Column(type="string", length=16, nullable=true)
-     * Assert\Lenght(min:3,max:16)
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * Assert\Lenght(min:3,max:255)
      */
     private $caste = null;
 
@@ -99,6 +99,11 @@ class Caracter
 
 
     private $links = [];
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="caracters")
+     */
+    private $user;
 
     public function getId(): ?int
     {
@@ -260,4 +265,17 @@ class Caracter
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
 }

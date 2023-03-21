@@ -47,7 +47,7 @@ class CaracterController extends AbstractController
     }
 
     /**
-     * @Route("/create", name="app_caracter_create", methods={"POST","HEAD"})
+     * @Route("/create", name="app_caracter_create", methods={"POST"})
      */
     public function create(Request $request): JsonResponse
     {
@@ -60,7 +60,7 @@ class CaracterController extends AbstractController
      * @Route("/caracter/modify/{identifier}",
      *  name="app_character_modify",
      * requirements={"identifier"="^([a-z0-9]{40})$"},
-     *  methods={"PUT","HEAD"})
+     *  methods={"PUT"})
      */
     public function modify(Request $request, Caracter $character): JsonResponse
     {
@@ -73,7 +73,7 @@ class CaracterController extends AbstractController
      * @Route("/caracter/delete/{identifier}",
      *  name="app_character_delete",
      * requirements={"identifier"="^([a-z0-9]{40})$"},
-     *  methods={"DELETE","HEAD"})
+     *  methods={"DELETE"})
      */
     public function delete(Caracter $character): JsonResponse
     {
@@ -83,7 +83,7 @@ class CaracterController extends AbstractController
     }
 
     /**
-     * @Route("/caracter/index", name="app_caracter_index", methods={"GET","HEAD"})
+     * @Route("/caracter/index", name="app_caracter_index", methods={"GET"})
      */
     public function index(Request $request, PaginatorInterface $paginator): JsonResponse
     {
@@ -97,7 +97,7 @@ class CaracterController extends AbstractController
     }
 
     /**
-     * @Route("/caracter", name="app_character_redirect_index", methods={"GET","HEAD"})
+     * @Route("/caracter", name="app_character_redirect_index", methods={"GET"})
      */
     public function redirectIndex()
     {
@@ -106,7 +106,7 @@ class CaracterController extends AbstractController
 
     /**
      * @Route("/caracter/images/{number}", name="app_character_images",
-     * requirements={"number"="^([0-9]{1,2})$"}, methods={"GET","HEAD"})
+     * requirements={"number"="^([0-9]{1,2})$"}, methods={"GET"})
      */
     public function images(int $number = 1)
     {
@@ -117,7 +117,7 @@ class CaracterController extends AbstractController
 
     /**
      * @Route("/caracter/images/{kind}/{number}", name="app_character_images_kind",
-     * requirements={"number"="^([0-9]{1,2})$","kind"="^(dames|seigneurs|ennemis|ennemies)$"}, methods={"GET","HEAD"})
+     * requirements={"number"="^([0-9]{1,2})$","kind"="^(dames|seigneurs|ennemis|ennemies)$"}, methods={"GET"})
      */
     public function imagesKind(int $number = 1,string $kind="")
     {
