@@ -7,9 +7,18 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 use LogicException;
 use App\Entity\Caracter;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class CaracterVoter extends Voter
 {
+
+    private Security $security;
+    public function __construct(
+                 Security $security
+            ) {
+                $this->security = $security;
+            }
+
     public const CHARACTER_INDEX = 'characterIndex';
     public const CHARACTER_CREATE = 'characterCreate';
     public const CHARACTER_DISPLAY = 'characterDisplay';
@@ -67,12 +76,22 @@ class CaracterVoter extends Voter
     # Checks if is allowed to modify
     private function canModify($token, $subject)
     {
-        return true;
+        return $token->getUser() instanceof User && null !== $subject->getUser() &&
+            (
+                $subject->getUser()->getId() === $token->getUser()->getId() ||
+                $token->getUser()->isGranted('ROLE_ADMIN')
+            )
+        ;
     }
 
     # Checks if is allowed to delete
     private function canDelete($token, $subject)
     {
-        return true;
+        return $token->getUser() instanceof User && null !== $subject->getUser() &&
+            (
+                $subject->getUser()->getId() === $token->getUser()->getId() ||
+                $token->getUser()->isGranted('ROLE_ADMIN')
+            )
+        ;
     }
 }

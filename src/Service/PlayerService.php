@@ -22,6 +22,10 @@ use Symfony\Component\Serializer\Serializer;
 use App\Event\PlayerEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
+use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 
 class PlayerService implements PlayerServiceInterface
 {
@@ -57,10 +61,17 @@ class PlayerService implements PlayerServiceInterface
                             return $object->getId(); // Ce qu'il doit retourner
                         },
                     ];
-        $normalizers = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $normalizers = new ObjectNormalizer($classMetadataFactory, null, null, null, null, null, $defaultContext);
         $serializer = new Serializer([new DateTimeNormalizer(), $normalizers], [$encoders]);
         $this->setLinks($object);
-        return $serializer->serialize($object, 'json');
+
+        $context = (new ObjectNormalizerContextBuilder())
+             ->withGroups(['player'])
+             ->toArray()
+         ;
+
+         return $serializer->serialize($object, 'json', $context);
     }
 
     public function findAll(): array
@@ -139,6 +150,12 @@ class PlayerService implements PlayerServiceInterface
 
     public function setLinks($object)
     {
+        if($object instanceof SlidingPagination) {
+            foreach ($object->getItems() as $item) {
+                $this->setLinks($item);
+            }
+            return;
+        }
         $links =[[
             'rel' => 'self',
             'uri' => '/player/display/' . $object->getIdentifier()
@@ -150,11 +167,6 @@ class PlayerService implements PlayerServiceInterface
             'uri' => '/player/delete/' . $object->getIdentifier()
         ]];
         $object->setLinks($links);
-        if($object instanceof SlidingPagination) {
-                        foreach ($object->getItems() as $item) {
-                            $this->setLinks($item);
-                        }
-                        return;
-                    }
+        
     }
 }

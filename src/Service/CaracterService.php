@@ -22,6 +22,11 @@ use Symfony\Component\Serializer\Serializer;
 use App\Event\CaracterEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Finder\Finder;
+use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
+use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 
 class CaracterService implements CaracterServiceInterface
 {
@@ -143,14 +148,28 @@ class CaracterService implements CaracterServiceInterface
                             return $object->getId(); // Ce qu'il doit retourner
                         },
                     ];
-        $normalizers = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
-        $serializer = new Serializer([new DateTimeNormalizer(), $normalizers], [$encoders]);
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $normalizers = new ObjectNormalizer($classMetadataFactory, null, null, null, null, null, $defaultContext);        
+        $serializer = new Serializer([new DateTimeNormalizer(), $normalizers], [$encoders]);    
         $this->setLinks($object);
-        return $serializer->serialize($object, 'json');
+
+        $context = (new ObjectNormalizerContextBuilder())
+             ->withGroups(['caracter'])
+             ->toArray()
+         ;
+
+         return $serializer->serialize($object, 'json', $context);
     }
 
     public function setLinks($object)
     {
+            if($object instanceof SlidingPagination) {
+            // Si oui, on boucle sur les items
+            foreach ($object->getItems() as $item) {
+                $this->setLinks($item);
+            }
+        return;
+        }
         $links =[[
             'rel' => 'self',
             'uri' => '/caracter/' . $object->getIdentifier()
@@ -162,13 +181,7 @@ class CaracterService implements CaracterServiceInterface
             'uri' => '/caracter/delete/' . $object->getIdentifier()
         ]];
         $object->setLinks($links);
-        if($object instanceof SlidingPagination) {
-                        // Si oui, on boucle sur les items
-                        foreach ($object->getItems() as $item) {
-                            $this->setLinks($item);
-                        }
-                       return;
-                    }
+        
     }
 
     public function getImages(int $number,string $kind): array
