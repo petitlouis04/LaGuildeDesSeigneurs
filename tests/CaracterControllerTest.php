@@ -156,4 +156,14 @@ class CharacterControllerTest extends WebTestCase
     {
         self::$identifier = $this->content['identifier'];
     }
+
+    # Tests images
+    public function testImages()
+    {
+        //Tests without kind
+        $this->client->request('GET', '/caracter/images');
+        $this->assertJsonResponse();
+        $this->client->request('GET', '/caracter/images/3');
+        $this->assertJsonResponse();
+    }
 }

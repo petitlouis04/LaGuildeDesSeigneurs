@@ -25,4 +25,7 @@ interface CaracterServiceInterface
     public function serializeJson($object);
 
     public function setLinks($object);
+
+    # Gets random images
+    public function getImages(int $number,string $kind);
 }

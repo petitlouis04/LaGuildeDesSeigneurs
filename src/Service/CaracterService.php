@@ -21,6 +21,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use App\Event\CaracterEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Finder\Finder;
 
 class CaracterService implements CaracterServiceInterface
 {
@@ -168,5 +169,27 @@ class CaracterService implements CaracterServiceInterface
                         }
                        return;
                     }
+    }
+
+    public function getImages(int $number,string $kind): array
+    {
+        $folder = __DIR__ . '/../../public/images/';
+        if($kind != ""){
+            $folder.=$kind;
+        }
+        $finder = new Finder();
+        $finder
+            ->files() // On veut des fichiers
+            ->in($folder) // Dans le dossier images
+            ->notPath('/cartes/') // On ne veut pas les cartes
+            ->sortByName() // On trie par nom
+        ;
+        $images = array();
+        foreach ($finder as $file) {
+// dump($file); // Si vous voulez voir le contenu de file
+            $images[] = str_replace(__DIR__ . '/../../public', '', $file->getPathname());
+        }
+        shuffle($images);
+        return array_slice($images, 0, $number, true);
     }
 }

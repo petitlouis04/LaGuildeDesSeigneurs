@@ -103,4 +103,28 @@ class CaracterController extends AbstractController
     {
         return $this->redirectToRoute('app_caracter_index');
     }
+
+    /**
+     * @Route("/caracter/images/{number}", name="app_character_images",
+     * requirements={"number"="^([0-9]{1,2})$"}, methods={"GET","HEAD"})
+     */
+    public function images(int $number = 1)
+    {
+        $this->denyAccessUnlessGranted('characterIndex', null);
+        $images = $this->caracterService->getImages($number,"");
+        return new JsonResponse($images);
+    }
+
+    /**
+     * @Route("/caracter/images/{kind}/{number}", name="app_character_images_kind",
+     * requirements={"number"="^([0-9]{1,2})$","kind"="^(dames|seigneurs|ennemis|ennemies)$"}, methods={"GET","HEAD"})
+     */
+    public function imagesKind(int $number = 1,string $kind="")
+    {
+        $this->denyAccessUnlessGranted('characterIndex', null);
+        $images = $this->caracterService->getImages($number,$kind);
+        return new JsonResponse($images);
+    }
+
+    
 }
