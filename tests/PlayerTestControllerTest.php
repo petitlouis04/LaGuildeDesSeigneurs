@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Repository\UserRepository;
 
 class PlayerTestControllerTest extends WebTestCase
 {
@@ -14,6 +15,9 @@ class PlayerTestControllerTest extends WebTestCase
     public function setUp() : void
     {
         $this->client = static::createClient();
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        $testUser = $userRepository->findOneByEmail('contact@example.com');
+        $this->client->loginUser($testUser);
     }
 
     // Ce test doit être en premier car ils sont faits dans l'ordre

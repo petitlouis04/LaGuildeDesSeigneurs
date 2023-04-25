@@ -16,6 +16,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Attributes as OA;
 use Knp\Component\Pager\PaginatorInterface;
 
+
 class CaracterController extends AbstractController
 {
     public CaracterServiceInterface $caracterIntercace;
@@ -47,7 +48,7 @@ class CaracterController extends AbstractController
     }
 
     /**
-     * @Route("/create", name="app_caracter_create", methods={"POST"})
+     * @Route("/caracter/create", name="app_caracter_create", methods={"POST"})
      */
     public function create(Request $request): JsonResponse
     {
@@ -124,6 +125,16 @@ class CaracterController extends AbstractController
         $this->denyAccessUnlessGranted('characterIndex', null);
         $images = $this->caracterService->getImages($number,$kind);
         return new JsonResponse($images);
+    }
+
+    /**
+     * @Route("/caracter/intelligence/{intelligence}",
+     *  name="app_character_images_kind",
+     *  methods={"GET"})
+     */
+    public function getIntelligence(int $intelligence){
+        $character = $this->caracterService->getIntelligence($intelligence);
+        return new JsonResponse($character);
     }
 
     

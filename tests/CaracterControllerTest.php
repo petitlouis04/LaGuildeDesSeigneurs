@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Repository\UserRepository;
 
 class CharacterControllerTest extends WebTestCase
 {
@@ -10,10 +11,15 @@ class CharacterControllerTest extends WebTestCase
 
     private $content; // Contenu de la réponse
     private static $identifier; // Identifier du Character
+    private static $userId;
 
     public function setUp() : void
     {
         $this->client = static::createClient();
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        $testUser = $userRepository->findOneByEmail('contact@example.com');
+        self::$userId = $testUser->getId();
+        $this->client->loginUser($testUser);
     }
 
     // Ce test doit être en premier car ils sont faits dans l'ordre
@@ -21,6 +27,7 @@ class CharacterControllerTest extends WebTestCase
     # Tests creates
     public function testCreate()
     {
+        $userId = self::$userId;
         $this->client->request(
                         'POST',
                         '/create',
@@ -36,7 +43,8 @@ class CharacterControllerTest extends WebTestCase
                             "knowledge":"Sciences",
                             "intelligence":130,
                             "life":11,
-                            "image":"/images/cartes/dames/anardil.jpg"
+                            "image":"/images/cartes/dames/anardil.jpg",
+                            "user": "{$userId}"
                         }
                         JSON
                     );
@@ -164,6 +172,11 @@ class CharacterControllerTest extends WebTestCase
         $this->client->request('GET', '/caracter/images');
         $this->assertJsonResponse();
         $this->client->request('GET', '/caracter/images/3');
+        $this->assertJsonResponse();
+    }
+
+    public function testIntelligence(){
+        $this->client->request('GET', '/caracter/intelligence/120');
         $this->assertJsonResponse();
     }
 }

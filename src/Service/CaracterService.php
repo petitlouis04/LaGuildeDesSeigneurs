@@ -170,6 +170,11 @@ class CaracterService implements CaracterServiceInterface
             }
         return;
         }
+        if(is_array($object)){
+            foreach($object as $item){
+                $this->setLinks($item);
+            }
+        }
         $links =[[
             'rel' => 'self',
             'uri' => '/caracter/' . $object->getIdentifier()
@@ -204,5 +209,21 @@ class CaracterService implements CaracterServiceInterface
         }
         shuffle($images);
         return array_slice($images, 0, $number, true);
+    }
+
+    public function getIntelligence(int $number):array{
+
+        return $this->caracterRepository->findByIntelligence($number);
+    
+        /*dd($characterList);
+
+        $bonlist = [];
+        foreach($characterList as $c){
+            if($c->getIntelligence() >= $number){
+                array_push($bonlist,$c);
+             }
+        }
+        return $bonlist;*/
+        
     }
 }

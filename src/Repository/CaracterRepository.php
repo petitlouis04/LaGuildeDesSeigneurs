@@ -51,6 +51,17 @@ class CaracterRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByIntelligence(int $intelligence): ?array
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c')
+            ->where('c.intelligence >= :intelligence')   
+            ->setParameter('intelligence', $intelligence)
+            ->getQuery()
+            ->getArrayResult()
+        ; 
+    }
+
 //    /**
 //     * @return Caracter[] Returns an array of Caracter objects
 //     */

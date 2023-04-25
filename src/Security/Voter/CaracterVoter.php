@@ -6,8 +6,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 use LogicException;
+use Symfony\Component\Security\Core\Security;
 use App\Entity\Caracter;
-use Symfony\Bundle\SecurityBundle\Security;
 
 class CaracterVoter extends Voter
 {
@@ -70,28 +70,18 @@ class CaracterVoter extends Voter
     # Checks if is allowed to create
     private function canCreate($token, $subject)
     {
-        return true;
+        return $this->security->isGranted('ROLE_ADMIN') || $subject->getUser()->getId() === $token->getUser()->getId();
     }
 
     # Checks if is allowed to modify
     private function canModify($token, $subject)
     {
-        return $token->getUser() instanceof User && null !== $subject->getUser() &&
-            (
-                $subject->getUser()->getId() === $token->getUser()->getId() ||
-                $token->getUser()->isGranted('ROLE_ADMIN')
-            )
-        ;
+        return $this->security->isGranted('ROLE_ADMIN') || $subject->getUser()->getId() === $token->getUser()->getId();
     }
 
     # Checks if is allowed to delete
     private function canDelete($token, $subject)
     {
-        return $token->getUser() instanceof User && null !== $subject->getUser() &&
-            (
-                $subject->getUser()->getId() === $token->getUser()->getId() ||
-                $token->getUser()->isGranted('ROLE_ADMIN')
-            )
-        ;
+        return $this->security->isGranted('ROLE_ADMIN') || $subject->getUser()->getId() === $token->getUser()->getId();
     }
 }
